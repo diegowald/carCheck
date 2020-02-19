@@ -1,0 +1,6 @@
+[submodule "served"]
+	path = served
+	url = https://github.com/meltwater/served.git
+[submodule "rapidjson"]
+	path = rapidjson
+	url = https://github.com/Tencent/rapidjson.git
