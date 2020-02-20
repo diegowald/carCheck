@@ -110,6 +110,7 @@ void CRUDBase::get(served::response & res, const served::request & req)
       std::cout << "# ERR: " << e.what();
       std::cout << " (MySQL error code: " << e.getErrorCode();
       std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
+      res.set_status(400);
     }
 
     std::cout << std::endl;
