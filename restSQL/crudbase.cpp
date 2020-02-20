@@ -10,16 +10,19 @@
 #include <cppconn/prepared_statement.h>
 #include <cppconn/resultset_metadata.h>
 
-CRUDBase::CRUDBase(const std::string &path, const std::string &host,
+CRUDBase::CRUDBase(const std::string &listenerName, const std::string &path, const std::string &host,
                    const std::string &user, const std::string &password,
                    const std::string &port, const std::string &database,
                    const std::string &table, bool handleGet, bool handleGetById, bool handlePost,
                    bool handleDelete, bool handleUpdate) :
-    _path(path), _host(host), _user(user), _password(password),
+    _name(listenerName), _path(path), _host(host), _user(user), _password(password),
     _port(port), _database(database), _table(table),
     _handleGet(handleGet), _handleGetById(handleGetById), _handlePost(handlePost),
     _handleDelete(handleDelete), _handleUpdate(handleUpdate)
 {
+    std::cout << "Handler created. Name" << _name << std::endl
+              << "\tPath: " << _path << std::endl
+              << "\tDatabase: " << _database << ", Table: " << _table << std::endl;
 }
 
 CRUDBase::~CRUDBase()
@@ -102,7 +105,7 @@ void CRUDBase::get(served::response & res, const served::request & req)
         std::cout << "\t... MySQL says it again: ";
         /* Access column data by numeric offset, 1 is the first column */
         std::cout << resultSet->getString(1) << std::endl;
-        res.set_body(resultSet->getString("doc"));
+        res << resultSet->getString("doc");
       }
     } catch (sql::SQLException &e) {
       std::cout << "# ERR: SQLException in " << __FILE__;

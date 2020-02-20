@@ -50,6 +50,7 @@ void setup(rapidjson::Document& jsonDoc,
         /*for (rapidjson::Value::ConstMemberIterator itr2 = attribute.MemberBegin(); itr2 != attribute.MemberEnd(); ++itr2) {
             std::cout << itr2->name.GetString() << " : " << itr2->value.GetString() << std::endl;
         }*/
+        std::string listenerName = resolver["name"].GetString();
         std::string path = resolver["path"].GetString();
         std::string dbHost = resolver["DBhost"].GetString();
         std::string dbUser = resolver["DBuser"].GetString();
@@ -62,7 +63,7 @@ void setup(rapidjson::Document& jsonDoc,
         bool handlePost = resolver["handlePost"].GetBool();
         bool handleDelete = resolver["handleDelete"].GetBool();
         bool handleUpdate = resolver["handleUpdate"].GetBool();
-        shared_ptr<CRUDBase> obj = std::make_shared<CRUDBase>(path, dbHost, dbUser,
+        shared_ptr<CRUDBase> obj = std::make_shared<CRUDBase>(listenerName, path, dbHost, dbUser,
                                                        dbPassword, dbPort,
                                                        dbName, tableName,
                                                        handleGet, handleGetById,
@@ -76,7 +77,7 @@ void setup(rapidjson::Document& jsonDoc,
 
 int main()
 {
-    cout << "Hello World!" << endl;
+    cout << "REST SQL Service!" << endl;
 
 
     std::string configJson = readCOnfigFile();
@@ -88,7 +89,7 @@ int main()
     }
 
 
-
+    cout << "Reading configuration file" << endl;
     rapidjson::Document d;
     d.Parse(configJson.c_str());
 
@@ -102,18 +103,11 @@ int main()
 
     setup(d, resolvers, address, port, numThreads, mux);
 
-/*    CRUDBase crudBase("/hello2", "172.17.0.2", "diego", "12345", "3306", "carcheck", "tabla1", true, true, true, false, false);
-    crudBase.setup(mux);*/
-
-    // GET /hello
-    mux.handle("/hello")
-            .get([](served::response & res, const served::request & req) {
-        res << "Hello world!";
-    });
+    cout << "Starting Service" << endl;
 
     // Create the server and run with 10 handler threads.
-    served::net::server server("127.0.0.1", "8080", mux);
-    server.run(10);
+    served::net::server server(address, port, mux);
+    server.run(numThreads);
 
     return 0;
 }

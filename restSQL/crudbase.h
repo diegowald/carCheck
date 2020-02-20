@@ -7,7 +7,8 @@
 class CRUDBase
 {
 public:
-    CRUDBase(const std::string &path,
+    CRUDBase(const std::string &listenerName,
+             const std::string &path,
              const std::string &host,
              const std::string &user,
              const std::string &password,
@@ -29,6 +30,7 @@ protected:
     virtual void update(served::response &res, const served::request &req);
 
 private:
+    std::string _name;
     std::string _path;
     std::string _host;
     std::string _user;
