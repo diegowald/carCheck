@@ -92,7 +92,7 @@ void CRUDBase::get(served::response & res, const served::request & req)
       std::unique_ptr<sql::Statement> stmt(con->createStatement());
 
       ss.str(std::string());
-      ss << "SELECT JSON_ARRAYAGG(doc) as doc FROM " << _table << ";";
+      ss << "SELECT JSON_ARRAYAGG(JSON_INSERT(doc, '$.id',  id)) as doc FROM " << _table << ";";
 
       std::unique_ptr<sql::ResultSet> resultSet(stmt->executeQuery(ss.str()));
 

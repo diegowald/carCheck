@@ -10,7 +10,7 @@
 
 using namespace std;
 
-std::string readCOnfigFile()
+std::string readConfigFile()
 {
     std::ifstream t("config.json");
     std::string str;
@@ -80,7 +80,7 @@ int main()
     cout << "REST SQL Service!" << endl;
 
 
-    std::string configJson = readCOnfigFile();
+    std::string configJson = readConfigFile();
 
     if (configJson.empty())
     {
